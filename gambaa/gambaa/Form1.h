@@ -49,6 +49,7 @@ namespace gambaa {
 	private: System::Windows::Forms::Button^  button4;
 	private: System::Windows::Forms::Button^  button5;
 	private: System::Windows::Forms::Button^  button6;
+	private: System::Windows::Forms::TextBox^  textBox1;
 
 	protected: 
 
@@ -76,6 +77,7 @@ namespace gambaa {
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->button6 = (gcnew System::Windows::Forms::Button());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->thumb))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->zoomin))->BeginInit();
 			this->SuspendLayout();
@@ -174,11 +176,19 @@ namespace gambaa {
 			this->button6->UseVisualStyleBackColor = true;
 			this->button6->Click += gcnew System::EventHandler(this, &Form1::button6_Click);
 			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(12, 191);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(114, 20);
+			this->textBox1->TabIndex = 9;
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(641, 323);
+			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button5);
 			this->Controls->Add(this->button4);
@@ -194,6 +204,7 @@ namespace gambaa {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->thumb))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->zoomin))->EndInit();
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
@@ -208,7 +219,7 @@ namespace gambaa {
 		private: void redraw()
 				 {
 				 Bitmap^ zoom = gcnew Bitmap(sizeX,sizeY); 				 
-				 image = gcnew Bitmap("C:\\Users\\Guilherme\\Pictures\\minbut.bmp",true);
+				 image = gcnew Bitmap(textBox1->Text,true);
 				 
 				 
 				 int i,j;
