@@ -112,26 +112,7 @@ namespace WiiIHCPie {
 	private: System::Void y_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 }
 	private: System::Void start_Click(System::Object^  sender, System::EventArgs^  e) {
-<<<<<<< HEAD
-				 while(true)//for(int i=0 ; i < 500 ; i++)
-				 {
-=======
-				 //for(int i=0 ; i < 10 ; i++)
-				 //{
->>>>>>> FUNCIONOU CARALHO
-					//this->Cursor = gcnew System::Windows::Forms::Cursor( ::Cursor::Current->Handle );
-					//::Cursor::Position = Point(::Cursor::Position.X - 50,::Cursor::Position.Y - 50);
-					//::Cursor::Clip = Rectangle(this->Location,this->Size);
-					
-					x->Text = Control::MousePosition.X.ToString();
-					//y->Text = Control::MousePosition.Y.ToString();
-					//Sleep(5000);
-					//y->Text = Control::MousePosition.X.ToString();
-					//y->Text = Control::MousePosition.Y.ToString();
-					//Sleep(5000);
-					//x->Text = Control::MousePosition.X.ToString();
-					//y->Text = Control::MousePosition.Y.ToString();
-				 //}
+
 				while(true)
 				{
 					int lastPosX;
