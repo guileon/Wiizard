@@ -37,6 +37,9 @@ namespace WiiIHCPie {
 	private: System::Windows::Forms::TextBox^  x;
 	protected: 
 	private: System::Windows::Forms::TextBox^  y;
+	private: System::Windows::Forms::PictureBox^  pictureBox1;
+	private: System::Windows::Forms::Button^  button1;
+	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
 
 
 	private:
@@ -54,6 +57,10 @@ namespace WiiIHCPie {
 		{
 			this->x = (gcnew System::Windows::Forms::TextBox());
 			this->y = (gcnew System::Windows::Forms::TextBox());
+			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
+			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// x
@@ -74,16 +81,41 @@ namespace WiiIHCPie {
 			this->y->TabIndex = 1;
 			this->y->TextChanged += gcnew System::EventHandler(this, &Form1::y_TextChanged);
 			// 
+			// pictureBox1
+			// 
+			this->pictureBox1->Location = System::Drawing::Point(128, 12);
+			this->pictureBox1->Name = L"pictureBox1";
+			this->pictureBox1->Size = System::Drawing::Size(277, 240);
+			this->pictureBox1->TabIndex = 2;
+			this->pictureBox1->TabStop = false;
+			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(22, 64);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(75, 23);
+			this->button1->TabIndex = 3;
+			this->button1->Text = L"load image";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &Form1::button1_Click);
+			// 
+			// openFileDialog1
+			// 
+			this->openFileDialog1->FileName = L"openFileDialog1";
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(284, 264);
+			this->ClientSize = System::Drawing::Size(417, 264);
+			this->Controls->Add(this->button1);
+			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->y);
 			this->Controls->Add(this->x);
 			this->Name = L"Form1";
 			this->Text = L"Form1";
 			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -110,6 +142,16 @@ namespace WiiIHCPie {
 				x->Refresh();
 				y->Refresh();
 			 }
-	};
+	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) 
+			 {
+				if(openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+				{
+					System::IO::StreamReader ^ sr = gcnew
+					System::IO::StreamReader(openFileDialog1->FileName);
+					MessageBox::Show(sr->ReadToEnd());
+					sr->Close();
+				}
+			 }
+};
 }
 
