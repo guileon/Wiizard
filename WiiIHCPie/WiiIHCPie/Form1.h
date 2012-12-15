@@ -132,19 +132,36 @@ namespace WiiIHCPie {
 			 }
 	private: System::Void y_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 }
-
+	static int posX=0,posY=0;
+	static Bitmap^ image=nullptr;
+	int positionX,positionY;
 	private: void PictureBox1_MouseMove( Object^ /*sender*/, System::Windows::Forms::MouseEventArgs^ e )
 			 {
 				// Update the mouse path that is drawn onto the Panel. 
-				int posX = e->X;
-				int posY = e->Y;
+				posX = e->X;
+				posY = e->Y;
 				//mousePath->AddLine( mouseX, mouseY, mouseX, mouseY );
 				y->Text = posY.ToString();
 				x->Text = posX.ToString();
 				x->Refresh();
 				y->Refresh();
+				
+				if(image!= nullptr)
+				{
+					posX = e->X;
+					posY = e->Y;
+					for(int i=0 ; i < 55 ; i++)
+					{
+						if (posX+i < image->Width && posY+i < image->Height)
+							image->SetPixel(posX+i,posY+i, Color::Red);
+					}
+
+				}
+				loadedImage->Image = image;
+				positionX = loadedImage->Location.X;
+				positionY = loadedImage->Location.Y;
 			 }
-	Bitmap^ image;
+	
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) 
 			 {
 				if(openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
@@ -155,7 +172,7 @@ namespace WiiIHCPie {
 					//sr->Close();
 					image = gcnew Bitmap(openFileDialog1->FileName);
 					//this->loadedImage->Image->FromFile(openFileDialog1->FileName);
-					image = gcnew Bitmap(openFileDialog1->FileName);
+					//image = gcnew Bitmap(openFileDialog1->FileName);
 					loadedImage->Image = image;
 					this->loadedImage->Refresh();
 				}
