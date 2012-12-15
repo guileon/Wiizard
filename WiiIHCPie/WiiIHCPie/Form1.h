@@ -19,9 +19,8 @@ namespace WiiIHCPie {
 		Form1(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+			this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler( this, &Form1::Form1_MouseMove );
+			
 		}
 
 	protected:
@@ -38,7 +37,7 @@ namespace WiiIHCPie {
 	private: System::Windows::Forms::TextBox^  x;
 	protected: 
 	private: System::Windows::Forms::TextBox^  y;
-	private: System::Windows::Forms::Button^  start;
+
 
 	private:
 		/// <summary>
@@ -55,7 +54,6 @@ namespace WiiIHCPie {
 		{
 			this->x = (gcnew System::Windows::Forms::TextBox());
 			this->y = (gcnew System::Windows::Forms::TextBox());
-			this->start = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// x
@@ -76,22 +74,11 @@ namespace WiiIHCPie {
 			this->y->TabIndex = 1;
 			this->y->TextChanged += gcnew System::EventHandler(this, &Form1::y_TextChanged);
 			// 
-			// start
-			// 
-			this->start->Location = System::Drawing::Point(22, 64);
-			this->start->Name = L"start";
-			this->start->Size = System::Drawing::Size(75, 23);
-			this->start->TabIndex = 2;
-			this->start->Text = L"Start";
-			this->start->UseVisualStyleBackColor = true;
-			this->start->Click += gcnew System::EventHandler(this, &Form1::start_Click);
-			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 264);
-			this->Controls->Add(this->start);
 			this->Controls->Add(this->y);
 			this->Controls->Add(this->x);
 			this->Name = L"Form1";
@@ -111,29 +98,17 @@ namespace WiiIHCPie {
 			 }
 	private: System::Void y_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 }
-	private: System::Void start_Click(System::Object^  sender, System::EventArgs^  e) {
 
-				while(true)
-				{
-					int lastPosX;
-					int posX = 0;
-					int lastPosY;
-					int posY = 0;
-
-					lastPosX = posX;
-					posX = Control::MousePosition.X;
-					lastPosY = posY;
-					posY = Control::MousePosition.Y;
-
-					if (lastPosX != posX || lastPosY != posY)
-					{
-						y->Text = posY.ToString();
-						x->Text = posX.ToString();
-						x->Refresh();
-						y->Refresh();
-					}
-				}
-
+	private: void Form1_MouseMove( Object^ /*sender*/, System::Windows::Forms::MouseEventArgs^ e )
+			 {
+				// Update the mouse path that is drawn onto the Panel. 
+				int posX = e->X;
+				int posY = e->Y;
+				//mousePath->AddLine( mouseX, mouseY, mouseX, mouseY );
+				y->Text = posY.ToString();
+				x->Text = posX.ToString();
+				x->Refresh();
+				y->Refresh();
 			 }
 	};
 }
