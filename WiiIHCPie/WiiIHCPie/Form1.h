@@ -19,7 +19,7 @@ namespace WiiIHCPie {
 		Form1(void)
 		{
 			InitializeComponent();
-			this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler( this, &Form1::Form1_MouseMove );
+			this->pictureBox1->MouseMove += gcnew System::Windows::Forms::MouseEventHandler( this, &Form1::PictureBox1_MouseMove );
 			
 		}
 
@@ -131,7 +131,7 @@ namespace WiiIHCPie {
 	private: System::Void y_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 }
 
-	private: void Form1_MouseMove( Object^ /*sender*/, System::Windows::Forms::MouseEventArgs^ e )
+	private: void PictureBox1_MouseMove( Object^ /*sender*/, System::Windows::Forms::MouseEventArgs^ e )
 			 {
 				// Update the mouse path that is drawn onto the Panel. 
 				int posX = e->X;
@@ -146,10 +146,13 @@ namespace WiiIHCPie {
 			 {
 				if(openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 				{
-					System::IO::StreamReader ^ sr = gcnew
-					System::IO::StreamReader(openFileDialog1->FileName);
-					MessageBox::Show(sr->ReadToEnd());
-					sr->Close();
+					//System::IO::StreamReader ^ sr = gcnew
+					//System::IO::StreamReader(openFileDialog1->FileName);
+					//MessageBox::Show(sr->ReadToEnd());
+					//sr->Close();
+
+					this->pictureBox1->Image->FromFile(openFileDialog1->FileName);
+					this->pictureBox1->Refresh();
 				}
 			 }
 };
