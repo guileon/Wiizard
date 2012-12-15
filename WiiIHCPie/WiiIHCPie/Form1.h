@@ -19,7 +19,7 @@ namespace WiiIHCPie {
 		Form1(void)
 		{
 			InitializeComponent();
-			this->pictureBox1->MouseMove += gcnew System::Windows::Forms::MouseEventHandler( this, &Form1::PictureBox1_MouseMove );
+			this->loadedImage->MouseMove += gcnew System::Windows::Forms::MouseEventHandler( this, &Form1::PictureBox1_MouseMove );
 			
 		}
 
@@ -37,7 +37,8 @@ namespace WiiIHCPie {
 	private: System::Windows::Forms::TextBox^  x;
 	protected: 
 	private: System::Windows::Forms::TextBox^  y;
-	private: System::Windows::Forms::PictureBox^  pictureBox1;
+	private: System::Windows::Forms::PictureBox^  loadedImage;
+
 	private: System::Windows::Forms::Button^  button1;
 	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
 
@@ -57,10 +58,10 @@ namespace WiiIHCPie {
 		{
 			this->x = (gcnew System::Windows::Forms::TextBox());
 			this->y = (gcnew System::Windows::Forms::TextBox());
-			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
+			this->loadedImage = (gcnew System::Windows::Forms::PictureBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->loadedImage))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// x
@@ -81,13 +82,14 @@ namespace WiiIHCPie {
 			this->y->TabIndex = 1;
 			this->y->TextChanged += gcnew System::EventHandler(this, &Form1::y_TextChanged);
 			// 
-			// pictureBox1
+			// loadedImage
 			// 
-			this->pictureBox1->Location = System::Drawing::Point(128, 12);
-			this->pictureBox1->Name = L"pictureBox1";
-			this->pictureBox1->Size = System::Drawing::Size(277, 240);
-			this->pictureBox1->TabIndex = 2;
-			this->pictureBox1->TabStop = false;
+			this->loadedImage->Location = System::Drawing::Point(128, 12);
+			this->loadedImage->Name = L"loadedImage";
+			this->loadedImage->Size = System::Drawing::Size(277, 240);
+			this->loadedImage->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
+			this->loadedImage->TabIndex = 2;
+			this->loadedImage->TabStop = false;
 			// 
 			// button1
 			// 
@@ -109,13 +111,13 @@ namespace WiiIHCPie {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(417, 264);
 			this->Controls->Add(this->button1);
-			this->Controls->Add(this->pictureBox1);
+			this->Controls->Add(this->loadedImage);
 			this->Controls->Add(this->y);
 			this->Controls->Add(this->x);
 			this->Name = L"Form1";
 			this->Text = L"Form1";
 			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->loadedImage))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -142,6 +144,7 @@ namespace WiiIHCPie {
 				x->Refresh();
 				y->Refresh();
 			 }
+	Bitmap^ image;
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) 
 			 {
 				if(openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
@@ -150,9 +153,11 @@ namespace WiiIHCPie {
 					//System::IO::StreamReader(openFileDialog1->FileName);
 					//MessageBox::Show(sr->ReadToEnd());
 					//sr->Close();
-
-					this->pictureBox1->Image->FromFile(openFileDialog1->FileName);
-					this->pictureBox1->Refresh();
+					image = gcnew Bitmap(openFileDialog1->FileName);
+					//this->loadedImage->Image->FromFile(openFileDialog1->FileName);
+					image = gcnew Bitmap(openFileDialog1->FileName);
+					loadedImage->Image = image;
+					this->loadedImage->Refresh();
 				}
 			 }
 };
