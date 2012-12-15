@@ -133,6 +133,7 @@ namespace WiiIHCPie {
 	private: System::Void y_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 }
 	static int posX=0,posY=0;
+	static Bitmap^ original=nullptr;
 	static Bitmap^ image=nullptr;
 	int positionX,positionY;
 	private: void PictureBox1_MouseMove( Object^ /*sender*/, System::Windows::Forms::MouseEventArgs^ e )
@@ -146,14 +147,27 @@ namespace WiiIHCPie {
 				x->Refresh();
 				y->Refresh();
 				
-				if(image!= nullptr)
+				loadedImage->Image = image;
+				if(image!= nullptr )
 				{
+					image = gcnew Bitmap(original);
 					posX = e->X;
 					posY = e->Y;
+					
 					for(int i=0 ; i < 55 ; i++)
 					{
-						if (posX+i < image->Width && posY+i < image->Height)
-							image->SetPixel(posX+i,posY+i, Color::Red);
+						if (posX+i < image->Width && posY+55 < image->Height)
+							image->SetPixel(posX+i,posY, Color::Red);
+						if (posX+i < image->Width && posY+55 < image->Height)
+							image->SetPixel(posX+i,posY+55, Color::Red);
+					}
+
+					for(int i=0 ; i < 55 ; i++)
+					{
+						if (posX+55 < image->Width && posY+i < image->Height)
+							image->SetPixel(posX,posY+i, Color::Red);
+						if (posX+55 < image->Width && posY+i < image->Height)
+							image->SetPixel(posX+55,posY+i, Color::Red);
 					}
 
 				}
@@ -174,6 +188,7 @@ namespace WiiIHCPie {
 					//this->loadedImage->Image->FromFile(openFileDialog1->FileName);
 					//image = gcnew Bitmap(openFileDialog1->FileName);
 					loadedImage->Image = image;
+					original = gcnew Bitmap(image);
 					this->loadedImage->Refresh();
 				}
 			 }
