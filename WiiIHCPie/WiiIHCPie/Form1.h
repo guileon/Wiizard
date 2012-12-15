@@ -41,6 +41,9 @@ namespace WiiIHCPie {
 
 	private: System::Windows::Forms::Button^  button1;
 	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
+	private: System::Windows::Forms::Button^  button2;
+	private: System::Windows::Forms::Button^  button3;
+	private: System::Windows::Forms::PictureBox^  zoomImage;
 
 
 	private:
@@ -61,7 +64,11 @@ namespace WiiIHCPie {
 			this->loadedImage = (gcnew System::Windows::Forms::PictureBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->zoomImage = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->loadedImage))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->zoomImage))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// x
@@ -105,11 +112,43 @@ namespace WiiIHCPie {
 			// 
 			this->openFileDialog1->FileName = L"openFileDialog1";
 			// 
+			// button2
+			// 
+			this->button2->Location = System::Drawing::Point(22, 93);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(75, 23);
+			this->button2->TabIndex = 4;
+			this->button2->Text = L"zoomin";
+			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &Form1::button2_Click);
+			// 
+			// button3
+			// 
+			this->button3->Location = System::Drawing::Point(22, 122);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(75, 23);
+			this->button3->TabIndex = 5;
+			this->button3->Text = L"zoomout";
+			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &Form1::button3_Click);
+			// 
+			// zoomImage
+			// 
+			this->zoomImage->Location = System::Drawing::Point(423, 12);
+			this->zoomImage->Name = L"zoomImage";
+			this->zoomImage->Size = System::Drawing::Size(277, 240);
+			this->zoomImage->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
+			this->zoomImage->TabIndex = 6;
+			this->zoomImage->TabStop = false;
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(417, 264);
+			this->ClientSize = System::Drawing::Size(711, 264);
+			this->Controls->Add(this->zoomImage);
+			this->Controls->Add(this->button3);
+			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->loadedImage);
 			this->Controls->Add(this->y);
@@ -118,6 +157,7 @@ namespace WiiIHCPie {
 			this->Text = L"Form1";
 			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->loadedImage))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->zoomImage))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -133,8 +173,10 @@ namespace WiiIHCPie {
 	private: System::Void y_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 }
 	static int posX=0,posY=0;
+	static int size = 100;
 	static Bitmap^ original=nullptr;
 	static Bitmap^ image=nullptr;
+	static Bitmap^ zoomZone=nullptr;
 	int positionX,positionY;
 	private: void PictureBox1_MouseMove( Object^ /*sender*/, System::Windows::Forms::MouseEventArgs^ e )
 			 {
@@ -150,24 +192,31 @@ namespace WiiIHCPie {
 				loadedImage->Image = image;
 				if(image!= nullptr )
 				{
+					zoomZone = gcnew Bitmap(size,size);
 					image = gcnew Bitmap(original);
 					posX = e->X;
 					posY = e->Y;
 					
-					for(int i=0 ; i < 55 ; i++)
+					for(int i=0 ; i < size ; i++)
+						for(int j=0 ; j < size ; j++)
+							if(posX+i < original->Width && posY+j < original->Height)
+								zoomZone->SetPixel(i,j,original->GetPixel(posX+i,posY+j));
+					zoomImage->Image = zoomZone;
+
+					for(int i=0 ; i < size ; i++)
 					{
-						if (posX+i < image->Width && posY+55 < image->Height)
+						if (posX+i < image->Width && posY+size < image->Height)
 							image->SetPixel(posX+i,posY, Color::Red);
-						if (posX+i < image->Width && posY+55 < image->Height)
-							image->SetPixel(posX+i,posY+55, Color::Red);
+						if (posX+i < image->Width && posY+size < image->Height)
+							image->SetPixel(posX+i,posY+size, Color::Red);
 					}
 
-					for(int i=0 ; i < 55 ; i++)
+					for(int i=0 ; i < size ; i++)
 					{
-						if (posX+55 < image->Width && posY+i < image->Height)
+						if (posX+size < image->Width && posY+i < image->Height)
 							image->SetPixel(posX,posY+i, Color::Red);
-						if (posX+55 < image->Width && posY+i < image->Height)
-							image->SetPixel(posX+55,posY+i, Color::Red);
+						if (posX+size < image->Width && posY+i < image->Height)
+							image->SetPixel(posX+size,posY+i, Color::Red);
 					}
 
 				}
@@ -192,6 +241,12 @@ namespace WiiIHCPie {
 					this->loadedImage->Refresh();
 				}
 			 }
+private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
+			 size-=10;
+		 }
+private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
+			 size+=10;
+		 }
 };
 }
 
