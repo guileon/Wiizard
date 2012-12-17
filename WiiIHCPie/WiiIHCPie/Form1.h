@@ -49,7 +49,8 @@ namespace WiiIHCPie {
 	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
 	private: System::Windows::Forms::Button^  button2;
 	private: System::Windows::Forms::Button^  button3;
-	private: System::Windows::Forms::PictureBox^  zoomImage;
+
+
 
 
 	private:
@@ -72,9 +73,7 @@ namespace WiiIHCPie {
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
-			this->zoomImage = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->loadedImage))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->zoomImage))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// x
@@ -97,6 +96,9 @@ namespace WiiIHCPie {
 			// 
 			// loadedImage
 			// 
+			this->loadedImage->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom) 
+				| System::Windows::Forms::AnchorStyles::Left) 
+				| System::Windows::Forms::AnchorStyles::Right));
 			this->loadedImage->Location = System::Drawing::Point(128, 12);
 			this->loadedImage->Name = L"loadedImage";
 			this->loadedImage->Size = System::Drawing::Size(277, 197);
@@ -138,22 +140,11 @@ namespace WiiIHCPie {
 			this->button3->UseVisualStyleBackColor = true;
 			this->button3->Click += gcnew System::EventHandler(this, &Form1::button3_Click);
 			// 
-			// zoomImage
-			// 
-			this->zoomImage->Location = System::Drawing::Point(22, 151);
-			this->zoomImage->Name = L"zoomImage";
-			this->zoomImage->Size = System::Drawing::Size(10, 10);
-			this->zoomImage->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-			this->zoomImage->TabIndex = 6;
-			this->zoomImage->TabStop = false;
-			this->zoomImage->Visible = false;
-			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(411, 212);
-			this->Controls->Add(this->zoomImage);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
@@ -164,7 +155,6 @@ namespace WiiIHCPie {
 			this->Text = L"Form1";
 			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->loadedImage))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->zoomImage))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -201,14 +191,15 @@ namespace WiiIHCPie {
 				x->Refresh();
 				y->Refresh();
 				
-				loadedImage->Image = image;
+
+				//loadedImage->Image = image;
 				if(image!= nullptr )
 				{
 					posX = (posX*original->Width)/loadedImage->Size.Width;
 					posY = (posY*original->Height)/loadedImage->Size.Height;
 
 					zoomZone = gcnew Bitmap(size,size);
-					image = gcnew Bitmap(original);					
+					//image = gcnew Bitmap(original);					
 					
 					if(posX + size >= original->Width)
 						posX = original->Width - size - 1;
@@ -240,7 +231,8 @@ namespace WiiIHCPie {
 
 
 				
-				loadedImage->Image = image;
+				//loadedImage->Image = image;
+
 				loadedImage->Refresh();
 				zoomedImage->changeImage(zoomZone);
 				//positionX = loadedImage->Location.X;
@@ -254,6 +246,7 @@ namespace WiiIHCPie {
 					image = gcnew Bitmap(openFileDialog1->FileName);
 
 					loadedImage->Image = image;
+					//loadedImage->BackgroundImage = image;
 					original = gcnew Bitmap(image);
 					this->loadedImage->Refresh();
 				}
