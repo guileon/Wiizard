@@ -1,6 +1,7 @@
 #pragma once
 #include <dos.h>
 #include <Windows.h>
+#include "ZoomImage.h"
 //include "CImg.h"
 //using namespace cimg_library;
 
@@ -21,6 +22,8 @@ namespace WiiIHCPie {
 	public:
 		Form1(void)
 		{
+			zoomedImage = gcnew ZoomImage;
+			zoomedImage->Show();
 			InitializeComponent();
 			this->loadedImage->MouseMove += gcnew System::Windows::Forms::MouseEventHandler( this, &Form1::PictureBox1_MouseMove );
 			
@@ -96,7 +99,7 @@ namespace WiiIHCPie {
 			// 
 			this->loadedImage->Location = System::Drawing::Point(128, 12);
 			this->loadedImage->Name = L"loadedImage";
-			this->loadedImage->Size = System::Drawing::Size(277, 240);
+			this->loadedImage->Size = System::Drawing::Size(277, 197);
 			this->loadedImage->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->loadedImage->TabIndex = 2;
 			this->loadedImage->TabStop = false;
@@ -137,18 +140,19 @@ namespace WiiIHCPie {
 			// 
 			// zoomImage
 			// 
-			this->zoomImage->Location = System::Drawing::Point(423, 12);
+			this->zoomImage->Location = System::Drawing::Point(22, 151);
 			this->zoomImage->Name = L"zoomImage";
-			this->zoomImage->Size = System::Drawing::Size(277, 240);
+			this->zoomImage->Size = System::Drawing::Size(10, 10);
 			this->zoomImage->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->zoomImage->TabIndex = 6;
 			this->zoomImage->TabStop = false;
+			this->zoomImage->Visible = false;
 			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(711, 264);
+			this->ClientSize = System::Drawing::Size(411, 212);
 			this->Controls->Add(this->zoomImage);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
@@ -180,6 +184,7 @@ namespace WiiIHCPie {
 	static Bitmap^ original=nullptr;
 	static Bitmap^ image=nullptr;
 	static Bitmap^ zoomZone=nullptr;
+	static ZoomImage^ zoomedImage=nullptr;
 	//int positionX,positionY;
 	//int *imageMatrix[15000][15000];
 	static int truePosX=0,truePosY=0;
@@ -203,18 +208,19 @@ namespace WiiIHCPie {
 					posY = (posY*original->Height)/loadedImage->Size.Height;
 
 					zoomZone = gcnew Bitmap(size,size);
-					image = gcnew Bitmap(original);
-					//posX = e->X;
-					//posY = e->Y;
+					image = gcnew Bitmap(original);					
 					
-					
+					if(posX + size >= original->Width)
+						posX = original->Width - size - 1;
+					if(posY + size >= original->Height)
+						posY = original->Height - size - 1;
 
 					for(int i=0 ; i < size ; i++)
 						for(int j=0 ; j < size ; j++)
 							if(posX+i < original->Width && posY+j < original->Height)
 								zoomZone->SetPixel(i,j,image->GetPixel(i+posX,j+posY));
-					zoomImage->Image = zoomZone;
-
+					//zoomImage->Image = zoomZone;
+					
 					for(int i=0 ; i < size ; i++)
 					{
 						if (posX+i < image->Width && posY+size < image->Height)
@@ -230,15 +236,13 @@ namespace WiiIHCPie {
 						if (posX+size < image->Width && posY+i < image->Height)
 							image->SetPixel(posX+size,posY+i, Color::Red);
 					}
-
 				}
 
 
 				
 				loadedImage->Image = image;
 				loadedImage->Refresh();
-				zoomImage->Image = zoomZone;
-				zoomImage->Refresh();
+				zoomedImage->changeImage(zoomZone);
 				//positionX = loadedImage->Location.X;
 				//positionY = loadedImage->Location.Y;
 			 }
@@ -247,17 +251,7 @@ namespace WiiIHCPie {
 			 {
 				if(openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 				{
-					//System::IO::StreamReader ^ sr = gcnew
-					//System::IO::StreamReader(openFileDialog1->FileName);
-					//MessageBox::Show(sr->ReadToEnd());
-					//sr->Close();
 					image = gcnew Bitmap(openFileDialog1->FileName);
-					//this->loadedImage->Image->FromFile(openFileDialog1->FileName);
-					//image = gcnew Bitmap(openFileDialog1->FileName);
-
-					//for(int i=0 ; i < image->Width ; i++)
-						//for(int j=0 ; j <image->Height ; j++)
-							//imageMatrix[i][j] = image->GetPixel(i,j).ToArgb();
 
 					loadedImage->Image = image;
 					original = gcnew Bitmap(image);
