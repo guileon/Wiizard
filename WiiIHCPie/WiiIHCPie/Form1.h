@@ -182,12 +182,14 @@ namespace WiiIHCPie {
 	static Bitmap^ zoomZone=nullptr;
 	//int positionX,positionY;
 	//int *imageMatrix[15000][15000];
-	//int truePosX=0,truePosY=0;
+	static int truePosX=0,truePosY=0;
 	private: void PictureBox1_MouseMove( Object^ /*sender*/, System::Windows::Forms::MouseEventArgs^ e )
 			 {
 				// Update the mouse path that is drawn onto the Panel. 
 				posX = e->X;
 				posY = e->Y;
+				truePosX = posX;
+				truePosY = posY;
 				//mousePath->AddLine( mouseX, mouseY, mouseX, mouseY );
 				y->Text = posY.ToString();
 				x->Text = posX.ToString();
@@ -210,7 +212,7 @@ namespace WiiIHCPie {
 					for(int i=0 ; i < size ; i++)
 						for(int j=0 ; j < size ; j++)
 							if(posX+i < original->Width && posY+j < original->Height)
-								zoomZone->SetPixel(i,j,original->GetPixel(i,j));
+								zoomZone->SetPixel(i,j,image->GetPixel(i+posX,j+posY));
 					zoomImage->Image = zoomZone;
 
 					for(int i=0 ; i < size ; i++)
@@ -235,6 +237,8 @@ namespace WiiIHCPie {
 				
 				loadedImage->Image = image;
 				loadedImage->Refresh();
+				zoomImage->Image = zoomZone;
+				zoomImage->Refresh();
 				//positionX = loadedImage->Location.X;
 				//positionY = loadedImage->Location.Y;
 			 }
