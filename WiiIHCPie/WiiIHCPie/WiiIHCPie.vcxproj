@@ -94,6 +94,7 @@
     <ClCompile Include="WiiIHCPie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\WiiIHC\WiiIHC\WiiIHCPie\CImg-1.5.2\CImg.h" />
     <ClInclude Include="Form1.h">
       <FileType>CppForm</FileType>
     </ClInclude>

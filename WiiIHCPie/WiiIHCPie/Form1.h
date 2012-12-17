@@ -1,6 +1,9 @@
 #pragma once
 #include <dos.h>
 #include <Windows.h>
+//include "CImg.h"
+//using namespace cimg_library;
+
 namespace WiiIHCPie {
 
 	using namespace System;
@@ -104,7 +107,7 @@ namespace WiiIHCPie {
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(75, 23);
 			this->button1->TabIndex = 3;
-			this->button1->Text = L"load image";
+			this->button1->Text = L"button1";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &Form1::button1_Click);
 			// 
@@ -177,7 +180,9 @@ namespace WiiIHCPie {
 	static Bitmap^ original=nullptr;
 	static Bitmap^ image=nullptr;
 	static Bitmap^ zoomZone=nullptr;
-	int positionX,positionY;
+	//int positionX,positionY;
+	//int *imageMatrix[15000][15000];
+	//int truePosX=0,truePosY=0;
 	private: void PictureBox1_MouseMove( Object^ /*sender*/, System::Windows::Forms::MouseEventArgs^ e )
 			 {
 				// Update the mouse path that is drawn onto the Panel. 
@@ -192,15 +197,20 @@ namespace WiiIHCPie {
 				loadedImage->Image = image;
 				if(image!= nullptr )
 				{
+					posX = (posX*original->Width)/loadedImage->Size.Width;
+					posY = (posY*original->Height)/loadedImage->Size.Height;
+
 					zoomZone = gcnew Bitmap(size,size);
 					image = gcnew Bitmap(original);
-					posX = e->X;
-					posY = e->Y;
+					//posX = e->X;
+					//posY = e->Y;
 					
+					
+
 					for(int i=0 ; i < size ; i++)
 						for(int j=0 ; j < size ; j++)
 							if(posX+i < original->Width && posY+j < original->Height)
-								zoomZone->SetPixel(i,j,original->GetPixel(posX+i,posY+j));
+								zoomZone->SetPixel(i,j,original->GetPixel(i,j));
 					zoomImage->Image = zoomZone;
 
 					for(int i=0 ; i < size ; i++)
@@ -220,9 +230,13 @@ namespace WiiIHCPie {
 					}
 
 				}
+
+
+				
 				loadedImage->Image = image;
-				positionX = loadedImage->Location.X;
-				positionY = loadedImage->Location.Y;
+				loadedImage->Refresh();
+				//positionX = loadedImage->Location.X;
+				//positionY = loadedImage->Location.Y;
 			 }
 	
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) 
@@ -236,6 +250,11 @@ namespace WiiIHCPie {
 					image = gcnew Bitmap(openFileDialog1->FileName);
 					//this->loadedImage->Image->FromFile(openFileDialog1->FileName);
 					//image = gcnew Bitmap(openFileDialog1->FileName);
+
+					//for(int i=0 ; i < image->Width ; i++)
+						//for(int j=0 ; j <image->Height ; j++)
+							//imageMatrix[i][j] = image->GetPixel(i,j).ToArgb();
+
 					loadedImage->Image = image;
 					original = gcnew Bitmap(image);
 					this->loadedImage->Refresh();
