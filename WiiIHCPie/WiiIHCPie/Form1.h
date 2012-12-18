@@ -156,7 +156,7 @@ namespace WiiIHCPie {
 			this->Controls->Add(this->y);
 			this->Controls->Add(this->x);
 			this->Name = L"Form1";
-			this->Text = L"Form1";
+			this->Text = L"Wiimage";
 			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->loadedImage))->EndInit();
 			this->ResumeLayout(false);
