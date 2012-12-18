@@ -26,7 +26,7 @@ namespace WiiIHCPie {
 			zoomedImage->Show();
 			InitializeComponent();
 			this->loadedImage->MouseMove += gcnew System::Windows::Forms::MouseEventHandler( this, &Form1::PictureBox1_MouseMove );
-			
+			this->loadedImage->MouseDown += gcnew System::Windows::Forms::MouseEventHandler( this, &Form1::PictureBox1_MouseClicked );
 		}
 
 	protected:
@@ -78,20 +78,22 @@ namespace WiiIHCPie {
 			// 
 			// x
 			// 
-			this->x->Location = System::Drawing::Point(22, 12);
+			this->x->Location = System::Drawing::Point(22, 41);
 			this->x->Name = L"x";
 			this->x->ReadOnly = true;
 			this->x->Size = System::Drawing::Size(100, 20);
 			this->x->TabIndex = 0;
+			this->x->Visible = false;
 			this->x->TextChanged += gcnew System::EventHandler(this, &Form1::x_TextChanged);
 			// 
 			// y
 			// 
-			this->y->Location = System::Drawing::Point(22, 38);
+			this->y->Location = System::Drawing::Point(22, 67);
 			this->y->Name = L"y";
 			this->y->ReadOnly = true;
 			this->y->Size = System::Drawing::Size(100, 20);
 			this->y->TabIndex = 1;
+			this->y->Visible = false;
 			this->y->TextChanged += gcnew System::EventHandler(this, &Form1::y_TextChanged);
 			// 
 			// loadedImage
@@ -108,11 +110,11 @@ namespace WiiIHCPie {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(22, 64);
+			this->button1->Location = System::Drawing::Point(22, 12);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(75, 23);
 			this->button1->TabIndex = 3;
-			this->button1->Text = L"button1";
+			this->button1->Text = L"Load Image";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &Form1::button1_Click);
 			// 
@@ -128,6 +130,7 @@ namespace WiiIHCPie {
 			this->button2->TabIndex = 4;
 			this->button2->Text = L"zoomin";
 			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Visible = false;
 			this->button2->Click += gcnew System::EventHandler(this, &Form1::button2_Click);
 			// 
 			// button3
@@ -138,6 +141,7 @@ namespace WiiIHCPie {
 			this->button3->TabIndex = 5;
 			this->button3->Text = L"zoomout";
 			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Visible = false;
 			this->button3->Click += gcnew System::EventHandler(this, &Form1::button3_Click);
 			// 
 			// Form1
@@ -199,7 +203,7 @@ namespace WiiIHCPie {
 					posY = (posY*original->Height)/loadedImage->Size.Height;
 
 					zoomZone = gcnew Bitmap(size,size);
-					//image = gcnew Bitmap(original);					
+					image = gcnew Bitmap(original);					
 					
 					if(posX + size >= original->Width)
 						posX = original->Width - size - 1;
@@ -241,6 +245,9 @@ namespace WiiIHCPie {
 	
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) 
 			 {
+				openFileDialog1->FileName = ""; 
+				openFileDialog1->Filter = "jpg files (*.jpg)|*.jpg|png files (*.png)|*.png|All files (*.*)|*.*";
+				openFileDialog1->RestoreDirectory = true;
 				if(openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 				{
 					image = gcnew Bitmap(openFileDialog1->FileName);
@@ -256,6 +263,22 @@ private: System::Void button2_Click(System::Object^  sender, System::EventArgs^ 
 		 }
 private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
 			 size+=10;
+		 }
+
+		 
+private: void PictureBox1_MouseClicked( Object^ /*sender*/, System::Windows::Forms::MouseEventArgs^ e )
+		 {
+			switch ( e->Button )
+			 {
+				case System::Windows::Forms::MouseButtons::Right:
+					size += 10;
+				   break;
+
+				case System::Windows::Forms::MouseButtons::Left:
+					size -= 10;
+				   break;
+			 }
+
 		 }
 };
 }
